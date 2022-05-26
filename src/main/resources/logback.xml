@@ -1,0 +1,23 @@
+<configuration>
+
+    <appender name="mask" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="com.edug.devfinder.configs.MaskingPatternLayout">
+                <maskPattern>\"SSN\"\s*:\s*\"(.*?)\"</maskPattern> <!-- SSN JSON pattern -->
+                <maskPattern>\"address\"\s*:\s*\"(.*?)\"</maskPattern> <!-- Address JSON pattern -->
+                <maskPattern>(\d+\.\d+\.\d+\.\d+)</maskPattern> <!-- Ip address IPv4 pattern -->
+                <maskPattern>(\w+@\w+\.\w+)</maskPattern> <!-- Email pattern -->
+                <maskPattern>[p,P]assword\"\s*:\s*\"(.*?)\"</maskPattern> <!-- Address JSON pattern -->
+                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </layout>
+        </encoder>
+    </appender>
+
+    <logger name="com.edug.devfinder.configs.HttpLoggingInterceptor" level="trace"/>
+    <logger name="com.edug.devfinder.configs.HttpLoggingFilter" level="trace"/>
+
+    <root level="info">
+        <appender-ref ref="mask"/>
+    </root>
+
+</configuration>
