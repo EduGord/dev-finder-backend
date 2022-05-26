@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,14 +23,9 @@ public class RecruiterService {
     private final TechnologyRepository technologyRepository;
     private final UserTechnologyRepository userTechnologyRepository;
 
-    public Set<UserTechnology> findAllUsersByTechnology(String name) {
+    public Optional<Set<UserTechnology>> findAllUsersByTechnology(String name) throws EntityNotFoundException {
         var technology = technologyRepository.findByNameIgnoreCase(name)
-                .orElseThrow(() -> new RuntimeException("Tecnologia não encontrada."));
-        var userTechnologies = userTechnologyRepository.findAllByTechnology(technology)
-                .orElseThrow(() -> new RuntimeException("Usuários não encontrados para esta tecnologia."));
-        return userTechnologies;
-//        return userTechnologies.stream()
-//                .map(UserTechnology::getUser)
-//                .collect(Collectors.toSet());
+                .orElseThrow(() -> new EntityNotFoundException("Technology not found."));
+        return userTechnologyRepository.findAllByTechnology(technology);
     }
 }

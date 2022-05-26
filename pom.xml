@@ -22,6 +22,15 @@
 		<lombok.version>1.18.24</lombok.version>
 		<commons-lang3.version>3.12.0</commons-lang3.version>
 		<jackson-datatype-joda.version>2.13.3</jackson-datatype-joda.version>
+		<org.projectlombok.version>1.18.22</org.projectlombok.version>
+		<org.apache.httpcomponents.version>4.5.13</org.apache.httpcomponents.version>
+		<org.apache.commons.version>3.12.0</org.apache.commons.version>
+		<io.springfox.version>3.0.0</io.springfox.version>
+		<org.springdoc.version>1.6.6</org.springdoc.version>
+		<com.fasterxml.jackson.core.version>2.13.3</com.fasterxml.jackson.core.version>
+		<com.fasterxml.jackson.datatype.version>2.13.3</com.fasterxml.jackson.datatype.version>
+		<com.fasterxml.jackson.module.version>2.13.3</com.fasterxml.jackson.module.version>
+		<io.micrometer.version>1.9.0</io.micrometer.version>
 	</properties>
 
 	<dependencies>
@@ -67,11 +76,6 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-registry-prometheus</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
@@ -110,11 +114,36 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>${commons-lang3.version}</version>
 		</dependency>
-		<!-- Serialization -->
+		<!--    Serialization   -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${com.fasterxml.jackson.core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-parameter-names</artifactId>
+			<version>${com.fasterxml.jackson.module.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${com.fasterxml.jackson.core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>${com.fasterxml.jackson.datatype.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jdk8</artifactId>
+			<version>${com.fasterxml.jackson.datatype.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-joda</artifactId>
-			<version>${jackson-datatype-joda.version}</version>
+			<version>${com.fasterxml.jackson.datatype.version}</version>
 		</dependency>
 		<!-- Logging -->
 		<dependency>
@@ -142,6 +171,33 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j-api.version}</version>
 		</dependency>
+		<!--    Documentation   -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-webmvc-core</artifactId>
+			<version>${org.springdoc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-security</artifactId>
+			<version>${org.springdoc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${org.springdoc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-data-rest</artifactId>
+			<version>${org.springdoc.version}</version>
+		</dependency>
+		<!--    Observability   -->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<version>${io.micrometer.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -157,6 +213,20 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<!-- OpenAPI -->
+			<plugin>
+				<groupId>org.springdoc</groupId>
+				<artifactId>springdoc-openapi-maven-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

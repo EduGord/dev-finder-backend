@@ -1,28 +1,38 @@
 INSERT INTO technology (id, name) VALUES
     (1, 'Kafka'),
     (2, 'Redis'),
-    (3,'RabbitMQ'),
+    (3, 'RabbitMQ'),
     (4, 'TensorFlow'),
     (5, 'GraphQL'),
     (6, 'React'),
     (7, 'Spring Boot'),
     (8, 'Angular'),
-    (9, 'Ionic');
+    (9, 'Ionic'),
+    (10, 'ReactJS'),
+    (11, 'React Native'),
+    (12, 'Vue'),
+    (13, 'Kubernetes'),
+    (14, 'Graphana'),
+    (15, 'Kibana'),
+    (16, 'Prometheus'),
+    (17, 'Redux'),
+    (18, 'PyTorch'),
+    (19, 'Keras');
 
 
-INSERT INTO users (id, first_name, last_name, email, password, enabled) VALUES
-    (1, 'Eduardo', 'Gordilho', 'edu_gordilho@hotmail.com', '12356', true),
-    (2, 'Maria', 'Pereira', 'mariapereira@example.com', '12356', true),
-    (3, 'Pedro', 'Santos', 'pedrosantos@example.com', '12356', true),
-    (4, 'José', 'Oliveira', 'joseoliveira@example.com', '12356', true),
-    (5, 'Ana', 'Souza', 'anasouza@example.com', '12356', true),
-    (6, 'Sofia', 'Rodrigues', 'sofiarodrigues@example.com', '12356', true),
-    (7, 'Felipe', 'Ferreira', 'felipeferreira@example.com', '12356', true),
-    (8, 'Augusto', 'Alves', 'augustoalves@example.com', '12356', true),
-    (9, 'Priscila', 'Lima', 'priscilalima@example.com', '12356', true),
-    (10, 'Jessica', 'Gomes', 'jessicagomes@example.com', '12356', true);
+INSERT INTO users (id, uuid, first_name, last_name, email, password, enabled) VALUES
+    (1, 'fccb401a-ecbf-4214-8aae-b198150229c2', 'Eduardo', 'Gordilho', 'edu_gordilho@hotmail.com', '12356', true),
+    (2, 'e225d8bb-91dd-42bb-b84b-a0cfd975a2e2', 'Maria', 'Pereira', 'mariapereira@example.com', '12356', true),
+    (3, 'c6a3567f-5ef0-4d03-83cb-95bc1818b9c9', 'Pedro', 'Santos', 'pedrosantos@example.com', '12356', true),
+    (4, 'f3812516-8a0a-41b1-a3d8-7009df5a129b', 'José', 'Oliveira', 'joseoliveira@example.com', '12356', true),
+    (5, '255f20e6-2180-4ac6-a256-3a779b4f14af', 'Ana', 'Souza', 'anasouza@example.com', '12356', true),
+    (6, 'ed2ca334-eef9-4c15-85f3-fff9a5b9bc4b', 'Sofia', 'Rodrigues', 'sofiarodrigues@example.com', '12356', true),
+    (7, '8e1814fd-ff69-4f83-b0b7-e3f238e5480a', 'Felipe', 'Ferreira', 'felipeferreira@example.com', '12356', true),
+    (8, '7e713758-43f2-4b3d-9a8b-3d980ee4068f', 'Augusto', 'Alves', 'augustoalves@example.com', '12356', true),
+    (9, 'b666308c-60ec-4648-a2dd-cc3081e21171', 'Priscila', 'Lima', 'priscilalima@example.com', '12356', true),
+    (10, '7e37278a-d6f2-4539-b412-082bde74d612', 'Jessica', 'Gomes', 'jessicagomes@example.com', '12356', true);
 
--- CHECK ProficiencyEnum
+-- Check ProficiencyEnum
 INSERT INTO user_technology (user_id, technology_id, proficiency_enum) VALUES
     (1, 7, 'BEGGINING'),
     (1, 2, 'INTERMEDIATE'),
@@ -66,12 +76,12 @@ INSERT INTO role (id, role) VALUES
     (3, 'ADMIN');
 
 -- Check PrivilegeEnum
-INSERT INTO privilege (id, name) VALUES
+INSERT INTO permission (id, permission) VALUES
     (1, 'READ'),
     (2, 'WRITE'),
     (3, 'CHANGE_PASSWORD');
 
-INSERT INTO roles_privileges(role_id, privilege_id) VALUES
+INSERT INTO roles_permissions(role_id, permission_id) VALUES
     (1, 1),
     (2, 1),
     (2, 2),

@@ -48,7 +48,6 @@ info:
   app:
     name: @project.artifactId@
     version: @project.version@
-    description: @project.description@
 
 management:
   health:
@@ -126,7 +125,6 @@ management:
   trace:
     http:
       enabled: true
-      #     org.springframework.boot.actuate.trace.http.Include
       include:
         - REQUEST_HEADERS
         - RESPONSE_HEADERS

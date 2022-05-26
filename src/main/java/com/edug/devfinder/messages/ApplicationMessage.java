@@ -35,7 +35,6 @@ public class ApplicationMessage implements Serializable {
         return this.exception == null ? null : this.exception.getLocalizedMessage();
     }
 
-    // TODO: REMOVER EXTRA E ENCAPSULAR O CONTEÚDO EM ALGUM OUTRO LUGAR
     @JsonProperty("Extra")
     private String extra;
 

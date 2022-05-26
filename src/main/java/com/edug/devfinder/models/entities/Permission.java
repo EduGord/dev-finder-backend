@@ -1,7 +1,7 @@
 package com.edug.devfinder.models.entities;
 
+import com.edug.devfinder.models.security.PermissionEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -14,21 +14,22 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Privilege implements GrantedAuthority {
+public class Permission implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private PermissionEnum permission;
 
-    @ManyToMany(mappedBy = "privileges")
+    @ManyToMany(mappedBy = "permissions")
     @JsonIgnore
     private Collection<Role> roles;
 
     @Override
     public String getAuthority() {
-        return this.name;
+        return this.permission.name();
     }
 }

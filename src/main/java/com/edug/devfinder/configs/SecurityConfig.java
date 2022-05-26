@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -31,12 +30,7 @@ public class SecurityConfig {
         expressionHandler.setRoleHierarchy(roleHierarchy());
         return expressionHandler;
     }
-
-    // Authentication
-//    @Bean
-//    public void configure(AuthenticationManagerBuilder auth) {}
-
-    // Authorization
+    // TODO
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -44,6 +38,7 @@ public class SecurityConfig {
                 .authorizeRequests().antMatchers("/").permitAll()
                 .and()
                 .authorizeRequests().antMatchers("/h2-console/**").hasAnyAuthority("ADMIN") //.permitAll()
+                //.anyRequest().authenticated()
                 .and()
                 .headers().frameOptions().disable()
                 .and()

@@ -1,7 +1,6 @@
 package com.edug.devfinder.models.entities;
 
 import com.edug.devfinder.models.security.RolesEnum;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -37,11 +36,11 @@ public class Role implements Serializable {
 
     @ManyToMany
     @JoinTable(
-            name = "roles_privileges",
+            name = "roles_permissions",
             joinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
-                    name = "privilege_id", referencedColumnName = "id"))
+                    name = "permission_id", referencedColumnName = "id"))
     @JsonIgnore
-    private Collection<Privilege> privileges;
+    private Collection<Permission> permissions;
 }

@@ -17,7 +17,8 @@ public class LoggerUtil {
     public static void logError(Logger log, Throwable throwable, String reason) {
         try {
             var string = new StringBuilder();
-            string.append("\n################################ ERRO ################################\n");
+
+            string.append("\n### ERROR ###");
 
             if (reason != null) {
                 string.append("Reason: ")
@@ -42,7 +43,7 @@ public class LoggerUtil {
             string.append("\nStackTrace: ")
                     .append(ExceptionUtils.getStackTrace(throwable));
 
-            string.append("\n################################ FIM ERRO ################################");
+            string.append("\n### ERROR END ###");
             log.error(string.toString());
         } catch (Exception e) {
             log.error(String.format(LogMessages.FAILED_TO_STDOUT_LOGGER_UTIL,

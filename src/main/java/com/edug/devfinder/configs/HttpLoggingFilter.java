@@ -45,9 +45,9 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
         var reqHeaders = new JSONObject();
 
         Collections.list(request.getHeaderNames())
-                .parallelStream().forEach(key ->
+                .forEach(key ->
                         Collections.list(request.getHeaders(key))
-                                .parallelStream().forEach(value -> reqHeaders.put(key, value)));
+                                .forEach(value -> reqHeaders.put(key, value)));
 
         var remoteAddr = getRemoteAddr(request);
 
@@ -72,12 +72,6 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
         log.trace(logMessage);
     }
 
-    private void doLogging(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response) {
-        UUID uuid = UUID.nameUUIDFromBytes(ArrayUtils.addAll(request.getContentAsByteArray(), response.getContentAsByteArray()));
-        logRequest(uuid, request);
-        logResponse(uuid, request, response);
-    }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -87,7 +81,9 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
 
         // Execution request chain
         filterChain.doFilter(req, resp);
-        this.doLogging(req, resp);
+        UUID uuid = UUID.nameUUIDFromBytes(ArrayUtils.addAll(req.getContentAsByteArray(), resp.getContentAsByteArray()));
+        logRequest(uuid, req);
+        logResponse(uuid, req, resp);
 
         // Finally remember to respond to the client with the cached data.
         resp.copyBodyToResponse();

@@ -57,3 +57,7 @@ hs_err_pid*
 *.jar
 *.war
 *.ear
+
+# Log
+/logs/**
+*.log
