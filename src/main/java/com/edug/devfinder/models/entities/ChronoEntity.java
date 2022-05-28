@@ -27,18 +27,15 @@ public class ChronoEntity implements Serializable {
 
     @Column(name = "created_at")
     @CreationTimestamp
-    @JsonFormat
-            (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     protected LocalDateTime createdAt;
 
     @Column(name = "last_updated_at")
     @UpdateTimestamp
-    @JsonFormat
-            (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     protected LocalDateTime updatedAt;
 
     @Column(name = "removed_at")
-    @JsonFormat
-            (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     protected LocalDateTime removedAt;
 }
