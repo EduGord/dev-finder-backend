@@ -4,12 +4,13 @@ import com.edug.devfinder.validators.email.ValidEmail;
 import com.edug.devfinder.validators.password.ValidPassword;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.NotBlank;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Setter
+@Builder
 public class UserRegistrationRequest {
 
     @NotBlank
@@ -37,4 +38,8 @@ public class UserRegistrationRequest {
     }
 
     public String getRawPassword()  { return rawPassword; }
+
+    public String getPassword(PasswordEncoder passwordEncoder) {
+        return passwordEncoder.encode(this.rawPassword);
+    }
 }

@@ -1,5 +1,6 @@
 package com.edug.devfinder.models;
 
+import com.edug.devfinder.validators.email.ValidEmail;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class AuthRequest {
-    private String email;
-    private String rawPassword;
+    @ValidEmail
+    private String username;
+
+    private String password;
 }

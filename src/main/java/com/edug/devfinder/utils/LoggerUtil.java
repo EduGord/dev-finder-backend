@@ -18,7 +18,7 @@ public class LoggerUtil {
         try {
             var string = new StringBuilder();
 
-            string.append("\n### ERROR ###");
+            string.append("\n### ERROR ###\n");
 
             if (reason != null) {
                 string.append("Reason: ")
@@ -53,8 +53,8 @@ public class LoggerUtil {
         }
     }
 
-    public static void logError(Logger log, Throwable t) {
-        logError(log, t, null);
+    public static void logError(Logger log, Throwable throwable) {
+        logError(log, throwable, null);
     }
 
     public static String parseRequest(UUID uuid, String providerName, HttpRequest request, byte[] bytes) {

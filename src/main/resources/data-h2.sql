@@ -20,17 +20,17 @@ INSERT INTO technology (id, name) VALUES
     (19, 'Keras');
 
 
-INSERT INTO users (id, uuid, first_name, last_name, email, password, enabled) VALUES
-    (1, 'fccb401a-ecbf-4214-8aae-b198150229c2', 'Eduardo', 'Gordilho', 'edu_gordilho@hotmail.com', '12356', true),
-    (2, 'e225d8bb-91dd-42bb-b84b-a0cfd975a2e2', 'Maria', 'Pereira', 'mariapereira@example.com', '12356', true),
-    (3, 'c6a3567f-5ef0-4d03-83cb-95bc1818b9c9', 'Pedro', 'Santos', 'pedrosantos@example.com', '12356', true),
-    (4, 'f3812516-8a0a-41b1-a3d8-7009df5a129b', 'José', 'Oliveira', 'joseoliveira@example.com', '12356', true),
-    (5, '255f20e6-2180-4ac6-a256-3a779b4f14af', 'Ana', 'Souza', 'anasouza@example.com', '12356', true),
-    (6, 'ed2ca334-eef9-4c15-85f3-fff9a5b9bc4b', 'Sofia', 'Rodrigues', 'sofiarodrigues@example.com', '12356', true),
-    (7, '8e1814fd-ff69-4f83-b0b7-e3f238e5480a', 'Felipe', 'Ferreira', 'felipeferreira@example.com', '12356', true),
-    (8, '7e713758-43f2-4b3d-9a8b-3d980ee4068f', 'Augusto', 'Alves', 'augustoalves@example.com', '12356', true),
-    (9, 'b666308c-60ec-4648-a2dd-cc3081e21171', 'Priscila', 'Lima', 'priscilalima@example.com', '12356', true),
-    (10, '7e37278a-d6f2-4539-b412-082bde74d612', 'Jessica', 'Gomes', 'jessicagomes@example.com', '12356', true);
+INSERT INTO users (id, uuid, first_name, last_name, username, password, enabled) VALUES
+    (1, 'fccb401a-ecbf-4214-8aae-b198150229c2', 'Eduardo', 'Gordilho', 'edu_gordilho@hotmail.com', 'e28c2024b1178702415b9cb27f8778329e74c85b766a7d1c4c8d8cd42d4989dec6dd0cddad899f32a26cb044e19c9142f46d8b85075a26aa6a686327576a5bad42167017b4bb750b', true),
+    (2, 'e225d8bb-91dd-42bb-b84b-a0cfd975a2e2', 'Maria', 'Pereira', 'mariapereira@example.com', 'e28c2024b1178702415b9cb27f8778329e74c85b766a7d1c4c8d8cd42d4989dec6dd0cddad899f32a26cb044e19c9142f46d8b85075a26aa6a686327576a5bad42167017b4bb750b', true),
+    (3, 'c6a3567f-5ef0-4d03-83cb-95bc1818b9c9', 'Pedro', 'Santos', 'pedrosantos@example.com', 'e28c2024b1178702415b9cb27f8778329e74c85b766a7d1c4c8d8cd42d4989dec6dd0cddad899f32a26cb044e19c9142f46d8b85075a26aa6a686327576a5bad42167017b4bb750b', true),
+    (4, 'f3812516-8a0a-41b1-a3d8-7009df5a129b', 'José', 'Oliveira', 'joseoliveira@example.com', 'e28c2024b1178702415b9cb27f8778329e74c85b766a7d1c4c8d8cd42d4989dec6dd0cddad899f32a26cb044e19c9142f46d8b85075a26aa6a686327576a5bad42167017b4bb750b', true),
+    (5, '255f20e6-2180-4ac6-a256-3a779b4f14af', 'Ana', 'Souza', 'anasouza@example.com', 'e28c2024b1178702415b9cb27f8778329e74c85b766a7d1c4c8d8cd42d4989dec6dd0cddad899f32a26cb044e19c9142f46d8b85075a26aa6a686327576a5bad42167017b4bb750b', true),
+    (6, 'ed2ca334-eef9-4c15-85f3-fff9a5b9bc4b', 'Sofia', 'Rodrigues', 'sofiarodrigues@example.com', 'e28c2024b1178702415b9cb27f8778329e74c85b766a7d1c4c8d8cd42d4989dec6dd0cddad899f32a26cb044e19c9142f46d8b85075a26aa6a686327576a5bad42167017b4bb750b', true),
+    (7, '8e1814fd-ff69-4f83-b0b7-e3f238e5480a', 'Felipe', 'Ferreira', 'felipeferreira@example.com', 'e28c2024b1178702415b9cb27f8778329e74c85b766a7d1c4c8d8cd42d4989dec6dd0cddad899f32a26cb044e19c9142f46d8b85075a26aa6a686327576a5bad42167017b4bb750b', true),
+    (8, '7e713758-43f2-4b3d-9a8b-3d980ee4068f', 'Augusto', 'Alves', 'augustoalves@example.com', 'e28c2024b1178702415b9cb27f8778329e74c85b766a7d1c4c8d8cd42d4989dec6dd0cddad899f32a26cb044e19c9142f46d8b85075a26aa6a686327576a5bad42167017b4bb750b', true),
+    (9, 'b666308c-60ec-4648-a2dd-cc3081e21171', 'Priscila', 'Lima', 'priscilalima@example.com', 'e28c2024b1178702415b9cb27f8778329e74c85b766a7d1c4c8d8cd42d4989dec6dd0cddad899f32a26cb044e19c9142f46d8b85075a26aa6a686327576a5bad42167017b4bb750b', true),
+    (10, '7e37278a-d6f2-4539-b412-082bde74d612', 'Jessica', 'Gomes', 'jessicagomes@example.com', 'e28c2024b1178702415b9cb27f8778329e74c85b766a7d1c4c8d8cd42d4989dec6dd0cddad899f32a26cb044e19c9142f46d8b85075a26aa6a686327576a5bad42167017b4bb750b', true);
 
 -- Check ProficiencyEnum
 INSERT INTO user_technology (user_id, technology_id, proficiency_enum) VALUES
@@ -77,11 +77,18 @@ INSERT INTO role (id, role) VALUES
 
 -- Check PrivilegeEnum
 INSERT INTO permission (id, permission) VALUES
-    (1, 'READ'),
-    (2, 'WRITE'),
-    (3, 'CHANGE_PASSWORD');
+    (1, 'READ_USER'),
+    (2, 'READ_PERMISSION'),
+    (3, 'READ_TECHNOLOGY'),
+    (4, 'READ_USER_TECHNOLOGY'),
+    (5, 'WRITE_USER'),
+    (6, 'WRITE_ROLE'),
+    (7, 'WRITE_PERMISSION'),
+    (8, 'WRITE_TECHNOLOGY'),
+    (9, 'WRITE_USER_TECHNOLOGY');
 
-INSERT INTO roles_permissions(role_id, permission_id) VALUES
+
+INSERT INTO role_permission(role_id, permission_id) VALUES
     (1, 1),
     (2, 1),
     (2, 2),

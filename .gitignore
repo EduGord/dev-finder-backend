@@ -61,3 +61,7 @@ hs_err_pid*
 # Log
 /logs/**
 *.log
+
+# h2
+h2.mv.db
+h2.trace.db

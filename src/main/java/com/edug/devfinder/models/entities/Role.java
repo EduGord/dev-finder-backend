@@ -3,12 +3,15 @@ package com.edug.devfinder.models.entities;
 import com.edug.devfinder.models.security.RolesEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 @Entity
 @Getter
@@ -34,7 +37,7 @@ public class Role implements Serializable {
     @JsonIgnore
     private Collection<User> users = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "roles_permissions",
             joinColumns = @JoinColumn(
@@ -43,4 +46,9 @@ public class Role implements Serializable {
                     name = "permission_id", referencedColumnName = "id"))
     @JsonIgnore
     private Collection<Permission> permissions;
+
+    @Transactional
+    public Collection<Permission> getPermissions() {
+        return this.permissions;
+    }
 }

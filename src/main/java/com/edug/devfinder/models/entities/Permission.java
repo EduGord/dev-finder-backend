@@ -1,7 +1,9 @@
 package com.edug.devfinder.models.entities;
 
 import com.edug.devfinder.models.security.PermissionEnum;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -24,8 +26,9 @@ public class Permission implements GrantedAuthority {
     @Enumerated(EnumType.STRING)
     private PermissionEnum permission;
 
-    @ManyToMany(mappedBy = "permissions")
+    @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
     @JsonIgnore
+    @JsonBackReference
     private Collection<Role> roles;
 
     @Override

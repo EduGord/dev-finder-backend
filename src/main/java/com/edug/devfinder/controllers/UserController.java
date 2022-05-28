@@ -2,44 +2,43 @@ package com.edug.devfinder.controllers;
 
 import com.edug.devfinder.models.AuthRequest;
 import com.edug.devfinder.models.UserRegistrationRequest;
-import com.edug.devfinder.models.entities.User;
-import com.edug.devfinder.services.UserService;
+import com.edug.devfinder.services.SecurityService;
+import com.edug.devfinder.services.UserServiceImpl;
+import com.edug.devfinder.utils.SerializerUtil;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.util.ClassUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(path = "/user")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class UserController {
-    private final UserService userService;
+    private final UserServiceImpl userService;
+
+    private final SecurityService securityService;
 
     @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> register(@Validated @RequestBody UserRegistrationRequest userRegistrationRequest) {
-        try {
-            return ResponseEntity.ok(userService.register(userRegistrationRequest));
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>(userService.register(userRegistrationRequest), HttpStatus.CREATED);
     }
 
-    @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> register(@Validated @RequestBody AuthRequest authRequest) {
-        try {
-            return ResponseEntity.ok(userService.signIn(authRequest));
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @GetMapping(path="all")
+    public ResponseEntity<?> findAll() {
+        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/all")
-    public List<User> listAll() {
-        return userService.listAll();
+    @GetMapping(path="refresh-token")
+    public ResponseEntity<?> refreshToken(@RequestParam(name="token") String refreshToken) {
+        return new ResponseEntity<>(securityService.refreshToken(refreshToken), HttpStatus.OK);
     }
 }

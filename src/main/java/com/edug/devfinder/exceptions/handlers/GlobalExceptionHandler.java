@@ -1,5 +1,6 @@
 package com.edug.devfinder.exceptions.handlers;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.edug.devfinder.exceptions.ApplicationException;
 import com.edug.devfinder.exceptions.ApplicationExternalException;
 import com.edug.devfinder.messages.ApplicationMessage;
@@ -116,6 +117,14 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public Map<String, List<ApplicationMessage>> handleInvalidRefreshTokenException(JWTVerificationException e) {
+        LoggerUtil.logError(log, e);
+        return errors(ApplicationMessage.parse(MessagesEnum.INVALID_JWT_TOKEN, e));
+    }
+
+    @ResponseBody
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public Map<String, List<ApplicationMessage>> handleApplicationException(ApplicationException e) {
         LoggerUtil.logError(log, e);
@@ -136,7 +145,9 @@ public class GlobalExceptionHandler {
             MissingPathVariableException.class, MissingServletRequestParameterException.class,
             ServletRequestBindingException.class, ConversionNotSupportedException.class,
             TypeMismatchException.class, HttpMessageNotWritableException.class,
-            MissingServletRequestPartException.class, BindException.class, AsyncRequestTimeoutException.class})
+            MissingServletRequestPartException.class, BindException.class, AsyncRequestTimeoutException.class,
+            Exception.class}
+    )
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, List<ApplicationMessage>> handleException(Exception e) {
         LoggerUtil.logError(log, e);

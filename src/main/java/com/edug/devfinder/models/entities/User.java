@@ -2,10 +2,14 @@ package com.edug.devfinder.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -32,7 +36,7 @@ public class User extends ChronoEntity implements UserDetails {
 
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(updatable = false, unique = true, nullable = false)
+    @Column(updatable = false, unique = true, nullable = false, columnDefinition = "uuid DEFAULT random_uuid()")
     private UUID uuid;
 
     @Column(nullable = false)
@@ -42,7 +46,7 @@ public class User extends ChronoEntity implements UserDetails {
     private String lastName;
 
     @Column(nullable = false)
-    private String email;
+    private String username;
 
     @Column(nullable = false)
     @JsonIgnore
@@ -56,34 +60,37 @@ public class User extends ChronoEntity implements UserDetails {
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @JsonIgnore
     private Collection<Role> roles = new ArrayList<>();
 
     private boolean enabled = false;
 
     @Override
+    @Transactional
     public Collection<Permission> getAuthorities() {
         return this.getRoles().stream().flatMap((roles) -> roles.getPermissions().stream()).collect(Collectors.toSet());
     }
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.username;
     }
 
+    // TODO
     @Override
     public boolean isAccountNonExpired() {
-        return this.enabled;
+        return this.removedAt == null;
     }
 
+    // TODO
     @Override
     public boolean isAccountNonLocked() {
         return this.enabled;
     }
 
+    // TODO
     @Override
     public boolean isCredentialsNonExpired() {
-        return this.enabled;
+        return true;
     }
 }
 
