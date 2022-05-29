@@ -72,8 +72,9 @@ INSERT INTO user_technology (user_id, technology_id, proficiency_enum) VALUES
 -- Check RoleEnum
 INSERT INTO role (id, role) VALUES
     (1, 'USER'),
-    (2, 'STAFF'),
-    (3, 'ADMIN');
+    (2, 'RECRUITER'),
+    (3, 'STAFF'),
+    (4, 'ADMIN');
 
 -- Check PrivilegeEnum
 INSERT INTO permission (id, permission) VALUES
@@ -94,23 +95,31 @@ INSERT INTO role_permission(role_id, permission_id) VALUES
     (1, 3),
     (1, 8),
     (1, 9),
+
     (2, 1),
     (2, 2),
     (2, 5),
     (2, 8),
     (2, 9),
+
     (3, 1),
     (3, 2),
-    (3, 3),
-    (3, 4),
     (3, 5),
-    (3, 6),
-    (3, 7),
     (3, 8),
-    (3, 9);
+    (3, 9),
+
+    (4, 1),
+    (4, 2),
+    (4, 3),
+    (4, 4),
+    (4, 5),
+    (4, 6),
+    (4, 7),
+    (4, 8),
+    (4, 9);
 
 INSERT INTO user_role (user_id, role_id) VALUES
-    (1, 3),
+    (1, 4),
     (2, 1),
     (3, 1),
     (4, 1),

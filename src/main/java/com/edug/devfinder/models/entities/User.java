@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -26,7 +24,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @SuperBuilder
 @Table(name = "users")
-public class User extends ChronoEntity implements UserDetails {
+public class User extends ChronoEntity {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -52,45 +50,23 @@ public class User extends ChronoEntity implements UserDetails {
     @JsonIgnore
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonBackReference
     private Collection<UserTechnology> technologies = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonIgnore
     private Collection<Role> roles = new ArrayList<>();
 
     private boolean enabled = false;
 
-    @Override
     @Transactional
-    public Collection<Permission> getAuthorities() {
-        return this.getRoles().stream().flatMap((roles) -> roles.getPermissions().stream()).collect(Collectors.toSet());
+    public Collection<Role> getRoles() {
+        return this.roles;
     }
 
-    @Override
-    public String getUsername() {
-        return this.username;
-    }
-
-    // TODO
-    @Override
-    public boolean isAccountNonExpired() {
-        return this.removedAt == null;
-    }
-
-    // TODO
-    @Override
-    public boolean isAccountNonLocked() {
-        return this.enabled;
-    }
-
-    // TODO
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
 }
 

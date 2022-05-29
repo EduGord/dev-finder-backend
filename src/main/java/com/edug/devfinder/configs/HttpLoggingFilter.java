@@ -26,7 +26,7 @@ import java.util.UUID;
 public class HttpLoggingFilter extends OncePerRequestFilter {
     private final Logger log = LoggerFactory.getLogger(ClassUtils.getUserClass(this.getClass()));
 
-    private final String[] SHOULD_NOT_FILTER_PATTERNS = {"/actuator/**", "/swagger-ui/**", "/h2-console/**"};
+    private final String[] SHOULD_NOT_FILTER_PATTERNS = {"/actuator/**", "/swagger-ui/**", "/h2-console/**", "/favicon.ico"};
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override
@@ -42,6 +42,8 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
     private void logRequest(UUID uuid, ContentCachingRequestWrapper request) {
         byte[] reqBytes = request.getContentAsByteArray();
         String reqBody = new String(reqBytes, StandardCharsets.ISO_8859_1);
+        var remoteAddr = getRemoteAddr(request);
+        var params = JSONObject.toJSONString(request.getParameterMap());
         var reqHeaders = new JSONObject();
 
         Collections.list(request.getHeaderNames())
@@ -49,24 +51,22 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
                         Collections.list(request.getHeaders(key))
                                 .forEach(value -> reqHeaders.put(key, value)));
 
-        var remoteAddr = getRemoteAddr(request);
-
-        var logMessage = String.format(LogMessages.HTTP_REQUEST, uuid,  request.getRequestURI(), request.getMethod(), remoteAddr, reqHeaders, reqBody);
+        var logMessage = String.format(LogMessages.HTTP_REQUEST, uuid, request.getRequestURI(), request.getMethod(), params, remoteAddr, reqHeaders, reqBody);
 
         log.trace(logMessage);
     }
 
     private void logResponse(UUID uuid, ContentCachingRequestWrapper request, ContentCachingResponseWrapper response) {
         byte[] respBytes = response.getContentAsByteArray();
-        String respBody =  new String(respBytes, StandardCharsets.ISO_8859_1);
+        String respBody = new String(respBytes, StandardCharsets.ISO_8859_1);
         var respHeaders = new JSONObject();
 
-        response.getHeaderNames().parallelStream().forEach(key ->
-                response.getHeaders(key).parallelStream().forEach(value -> respHeaders.put(key, value)));
+        response.getHeaderNames().forEach(key ->
+                response.getHeaders(key).forEach(value -> respHeaders.put(key, value)));
 
         var remoteAddr = getRemoteAddr(request);
 
-        var logMessage = String.format(LogMessages.HTTP_RESPONSE, uuid,  request.getRequestURI(),
+        var logMessage = String.format(LogMessages.HTTP_RESPONSE, uuid, request.getRequestURI(),
                 request.getMethod(), remoteAddr, respHeaders, respBody, response.getStatus());
 
         log.trace(logMessage);
@@ -79,8 +79,9 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
         ContentCachingRequestWrapper req = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper resp = new ContentCachingResponseWrapper(response);
 
-        // Execution request chain
+        // Free request chain
         filterChain.doFilter(req, resp);
+
         UUID uuid = UUID.nameUUIDFromBytes(ArrayUtils.addAll(req.getContentAsByteArray(), resp.getContentAsByteArray()));
         logRequest(uuid, req);
         logResponse(uuid, req, resp);

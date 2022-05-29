@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AuthorizationServiceException;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.AntPathMatcher;
@@ -54,6 +52,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter implements A
                 var permissions = decodedJwt.getClaim("authorities").asArray(String.class);
 
                 Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
                 Stream.of(permissions).map(SimpleGrantedAuthority::new).forEach(authorities::add);
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(username, null, authorities));
 

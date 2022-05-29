@@ -14,12 +14,12 @@ import java.util.List;
 public class TechnologyController {
     private final TechnologyService technologyService;
 
-    @PostMapping(path = "add")
+    @PostMapping(path = "/add")
     public Technology add(@RequestParam("name") String technologyName) {
         return technologyService.add(technologyName);
     }
 
-    @GetMapping(path = "all")
+    @GetMapping(path = "/all")
     public List<Technology> listAll() {
         return technologyService.listAll();
     }

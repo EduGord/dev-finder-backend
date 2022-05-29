@@ -1,18 +1,16 @@
 package com.edug.devfinder.models.entities;
 
 import com.edug.devfinder.models.security.PermissionEnum;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -26,12 +24,11 @@ public class Permission implements GrantedAuthority {
     @Enumerated(EnumType.STRING)
     private PermissionEnum permission;
 
-    @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JsonBackReference
+    @ManyToMany(mappedBy="permissions", fetch = FetchType.LAZY)
     private Collection<Role> roles;
 
     @Override
+    @JsonIgnore
     public String getAuthority() {
         return this.permission.name();
     }

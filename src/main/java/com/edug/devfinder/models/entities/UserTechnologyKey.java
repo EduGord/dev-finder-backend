@@ -1,7 +1,5 @@
 package com.edug.devfinder.models.entities;
 
-import net.minidev.json.annotate.JsonIgnore;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serial;

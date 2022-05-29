@@ -1,21 +1,21 @@
 package com.edug.devfinder.models.entities;
 
 import com.edug.devfinder.models.security.RolesEnum;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
-import org.hibernate.annotations.Fetch;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,24 +31,23 @@ public class Role implements Serializable {
     @Column(unique = true, nullable = false)
     private RolesEnum role;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    @JsonIgnore
+    @ManyToMany(mappedBy="roles", fetch = FetchType.LAZY)
+    @JsonBackReference
     private Collection<User> users = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            fetch = FetchType.LAZY)
     @JoinTable(
-            name = "roles_permissions",
+            name = "role_permission",
             joinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
                     name = "permission_id", referencedColumnName = "id"))
-    @JsonIgnore
+    @JsonBackReference
     private Collection<Permission> permissions;
 
-    @Transactional
-    public Collection<Permission> getPermissions() {
-        return this.permissions;
+    @JsonIgnore
+    public String getName() {
+        return this.role.name();
     }
 }
