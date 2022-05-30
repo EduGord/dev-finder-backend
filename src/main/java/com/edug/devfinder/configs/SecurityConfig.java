@@ -1,7 +1,7 @@
 package com.edug.devfinder.configs;
 
-import com.edug.devfinder.models.security.PermissionEnum;
-import com.edug.devfinder.models.security.RolesEnum;
+import com.edug.devfinder.models.enums.PermissionEnum;
+import com.edug.devfinder.models.enums.RolesEnum;
 import com.edug.devfinder.security.*;
 import com.edug.devfinder.services.UserDetailsServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -2,9 +2,9 @@ package com.edug.devfinder.services;
 
 import com.edug.devfinder.exceptions.ApplicationException;
 import com.edug.devfinder.messages.MessagesEnum;
-import com.edug.devfinder.models.UserRegistrationRequest;
+import com.edug.devfinder.models.consumers.users.UserRegistrationRequest;
 import com.edug.devfinder.models.entities.User;
-import com.edug.devfinder.models.security.RolesEnum;
+import com.edug.devfinder.models.enums.RolesEnum;
 import com.edug.devfinder.repositories.RoleRepository;
 import com.edug.devfinder.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;

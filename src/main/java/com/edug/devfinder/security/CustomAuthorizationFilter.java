@@ -50,9 +50,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter implements A
                 var decodedJwt = verifier.verify(token);
                 var username = decodedJwt.getSubject();
                 var permissions = decodedJwt.getClaim("authorities").asArray(String.class);
-
                 Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
                 Stream.of(permissions).map(SimpleGrantedAuthority::new).forEach(authorities::add);
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(username, null, authorities));
 

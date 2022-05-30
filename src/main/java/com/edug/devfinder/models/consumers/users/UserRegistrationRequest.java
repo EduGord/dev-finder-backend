@@ -1,4 +1,4 @@
-package com.edug.devfinder.models;
+package com.edug.devfinder.models.consumers.users;
 
 import com.edug.devfinder.validators.email.ValidEmail;
 import com.edug.devfinder.validators.password.ValidPassword;

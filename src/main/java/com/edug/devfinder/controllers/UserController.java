@@ -1,6 +1,6 @@
 package com.edug.devfinder.controllers;
 
-import com.edug.devfinder.models.UserRegistrationRequest;
+import com.edug.devfinder.models.consumers.users.UserRegistrationRequest;
 import com.edug.devfinder.services.SecurityService;
 import com.edug.devfinder.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;

@@ -19,4 +19,7 @@ public interface AuthenticationConstants {
             "/actuator/{(?<=health).+(?=)}",
             "/swagger-ui/**"
     };
+
+    int REFRESH_TOKEN_DURATION = 12; // hours
+    int TOKEN_DURATION = 3; // hours
 }

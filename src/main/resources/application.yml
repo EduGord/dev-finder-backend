@@ -32,6 +32,8 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
+        connection:
+          provider_disables_autocommit: true
         temp:
           use_jdbc_metadata_defaults: false
   mvc:

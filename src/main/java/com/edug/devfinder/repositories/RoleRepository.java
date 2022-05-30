@@ -1,7 +1,7 @@
 package com.edug.devfinder.repositories;
 
 import com.edug.devfinder.models.entities.Role;
-import com.edug.devfinder.models.security.RolesEnum;
+import com.edug.devfinder.models.enums.RolesEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

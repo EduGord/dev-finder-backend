@@ -1,6 +1,6 @@
 package com.edug.devfinder.models.entities;
 
-import com.edug.devfinder.models.security.PermissionEnum;
+import com.edug.devfinder.models.enums.PermissionEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

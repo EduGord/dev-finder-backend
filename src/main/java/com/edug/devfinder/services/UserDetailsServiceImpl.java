@@ -9,18 +9,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
+@Transactional(readOnly = true)
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final EntityManagerFactory entityManagerFactory;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        var entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         var user = entityManager.createQuery(
                         "SELECT u FROM User u WHERE UPPER(u.username) = UPPER(:username)", User.class)

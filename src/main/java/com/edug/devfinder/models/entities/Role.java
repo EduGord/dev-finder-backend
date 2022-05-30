@@ -1,6 +1,6 @@
 package com.edug.devfinder.models.entities;
 
-import com.edug.devfinder.models.security.RolesEnum;
+import com.edug.devfinder.models.enums.RolesEnum;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.edug.devfinder.models.security;
+package com.edug.devfinder.models.enums;
 
 public enum PermissionEnum {
     READ_USER,
