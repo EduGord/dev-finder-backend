@@ -1,7 +1,8 @@
 package com.edug.devfinder.security;
 
+import com.edug.devfinder.exceptions.LoginAttemptBlockedException;
 import com.edug.devfinder.messages.MessagesEnum;
-import com.edug.devfinder.utils.LoggerUtil;
+import com.edug.devfinder.services.LoginAttemptsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -28,15 +29,27 @@ public class CustomAuthenticationFailureHandler
     private final Logger log = LoggerFactory.getLogger(ClassUtils.getUserClass(this.getClass()));
     private final ObjectMapper objectMapper;
 
+    private final LoginAttemptsService loginAttemptsService;
+
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws ServletException, IOException {
+
+        String ip = request.getHeader("X-FORWARDED-FOR") != null ? request.getHeader("X-FORWARDED-FOR") : request.getRemoteAddr();
+
         var errors = new HashMap<String, Object>();
-        var error = MessagesEnum.INVALID_CREDENTIALS.toMap(exception);
+        var error = new HashMap<String, Object>();
+
+        if (exception instanceof LoginAttemptBlockedException) {
+            error = MessagesEnum.LOGIN_ATTEMPTS_EXCEEDED_LIMIT.toMap(exception);
+        } else {
+            error =  MessagesEnum.INVALID_CREDENTIALS.toMap(exception);
+            loginAttemptsService.onAuthenticationFailure(request.getParameter("username"), ip);
+        }
+
         errors.put("Errors", List.of(error));
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         objectMapper.writeValue(response.getOutputStream(), errors);
-        LoggerUtil.logError(log, exception);
     }
 }

@@ -28,3 +28,12 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
         hbm2ddl:
           auto: create
+  redis:
+    client-name: devfinder
+    password: devfinder
+    ssl: false
+    cluster:
+      nodes:
+        - localhost:7000
+        - localhost:7001
+        - localhost:7002

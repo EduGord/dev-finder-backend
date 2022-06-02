@@ -10,6 +10,8 @@ import com.edug.devfinder.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +31,19 @@ public class UserServiceImpl implements UserService {
                .orElseThrow(()-> new UsernameNotFoundException(MessagesEnum.USER_NOT_FOUND.getMessage()));
        var role = roleRepository.findByRole(RolesEnum.valueOf(roleName.toUpperCase()))
                .orElseThrow(()-> new EntityNotFoundException("Role not found."));
-       if (!user.getRoles().contains(role))
+       if (!user.getRoles().contains(role)) {
            user.getRoles().add(role);
-       userRepository.save(user);
+           userRepository.save(user);
+       }
     }
 
-    public User login(String username, String rawPassword) throws EntityNotFoundException, BadCredentialsException {
+    public User findSelf() throws AuthenticationException {
+        var username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findByUsernameIgnoreCase(username)
+                .orElseThrow(()-> new UsernameNotFoundException(MessagesEnum.USER_NOT_FOUND.getMessage()));
+    }
+
+    public User findUser(String username, String rawPassword) throws AuthenticationException {
         var user = userRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(()-> new UsernameNotFoundException(MessagesEnum.USER_NOT_FOUND.getMessage()));
         if (securityService.checkPassword(rawPassword, user.getPassword()))
@@ -46,12 +55,13 @@ public class UserServiceImpl implements UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
     @Override
     public User register(UserRegistrationRequest userRegistrationRequest) throws EntityNotFoundException, ApplicationException {
         var existingUser = userRepository.findByUsernameIgnoreCase(userRegistrationRequest.getEmail());
         if (existingUser.isPresent())
             throw new ApplicationException("User already exists.");
-        var userRole = roleRepository.findByRole(RolesEnum.valueOf(RolesEnum.USER.name()))
+        var userRole = roleRepository.findByRole(RolesEnum.USER)
                 .orElseThrow(()-> new EntityNotFoundException("Role not found."));
         var user = User.builder()
                 .username(userRegistrationRequest.getEmail())

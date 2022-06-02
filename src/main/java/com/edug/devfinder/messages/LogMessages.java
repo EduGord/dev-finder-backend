@@ -17,4 +17,15 @@ public class LogMessages {
     public static final String FAILED_TO_LOG_STDOUT = "Error attempting to write log. [Exception=%s]";
     public static final String FAILED_TO_STDOUT = "Error attempting to write log. [Exception=%s]";
     public static final String FAILED_TO_STDOUT_LOGGER_UTIL = "Error logging [Log=%s, Throwable=%s, Reason=%s]";
+
+    // cache
+    public static final String REDIS_UNABLE_TO_GET_CACHE = "Unable to get from cache [Cache=%s, Exception=%s]";
+    public static final String REDIS_UNABLE_TO_PUT_CACHE = "Unable to put into cache [Cache=%s, Exception=%s]";
+    public static final String REDIS_UNABLE_TO_EVICT_CACHE = "Unable to evict from cache [Cache=%s, Exception=%s]";
+    public static final String REDIS_UNABLE_TO_CLEAN_CACHE = "Unable to clean cache [Cache=%s, Exception=%s]";
+    public static final String REDIS_TIMEOUT = "Redis Timeout. [Exception=%s]";
+    public static final String REDIS_REFRESHING_CACHE = "Refreshing cache [Cache=%s]";
+
+    public static final String CACHE_EVICTION_SCHEDULER_CLEAR_GROUP = "Clearing cache group [Cache=%s]";
+
 }

@@ -1,9 +1,11 @@
 package com.edug.devfinder.configs;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -36,6 +38,16 @@ public class ObjectMapperConfig {
                         // Json
                         new JodaModule())
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                .findAndRegisterModules();
+    }
+
+    @Bean
+    public ObjectMapper redisObjectMapper() {
+        log.info("Customizing Redis Object Mapper.");
+        return this.objectMapper().copy()
+                .activateDefaultTyping(LaissezFaireSubTypeValidator.instance,
+                        ObjectMapper.DefaultTyping.NON_FINAL,
+                        JsonTypeInfo.As.PROPERTY)
                 .findAndRegisterModules();
     }
 }

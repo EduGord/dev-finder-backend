@@ -3,6 +3,7 @@ package com.edug.devfinder.configs;
 import com.edug.devfinder.models.enums.PermissionEnum;
 import com.edug.devfinder.models.enums.RolesEnum;
 import com.edug.devfinder.security.*;
+import com.edug.devfinder.services.LoginAttemptsService;
 import com.edug.devfinder.services.UserDetailsServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -12,14 +13,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -31,17 +29,23 @@ import org.springframework.web.filter.CorsFilter;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManagerFactory;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class SecurityConfig implements AuthenticationConstants {
-
     @Resource
     private final ObjectMapper objectMapper;
 
+
+    @Resource
+
+    private final LoginAttemptsService loginAttemptsService;
+
     private final EntityManagerFactory entityManagerFactory;
+
+    private final HttpServletRequest request;
 
     @EnableGlobalMethodSecurity(
             prePostEnabled = true,
@@ -50,8 +54,8 @@ public class SecurityConfig implements AuthenticationConstants {
     public static class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {}
 
     @Bean
-    protected UserDetailsService userDetailsService() {
-        return new UserDetailsServiceImpl(entityManagerFactory);
+    protected UserDetailsServiceImpl userDetailsService() {
+        return new UserDetailsServiceImpl(entityManagerFactory, loginAttemptsService, request);
     }
 
     @Bean
@@ -90,13 +94,13 @@ public class SecurityConfig implements AuthenticationConstants {
     }
 
     @Bean
-    public AuthenticationManager customAuthenticationProvider() {
-        return new ProviderManager(List.of(new CustomAuthenticationProvider(passwordEncoder(), userDetailsService())));
+    public CustomAuthenticationProvider customAuthenticationProvider() {
+        return new CustomAuthenticationProvider(passwordEncoder(), userDetailsService());
     }
 
     @Bean
     public CustomAuthenticationFailureHandler customAuthenticationFailureHandler(){
-        return new CustomAuthenticationFailureHandler(objectMapper);
+        return new CustomAuthenticationFailureHandler(objectMapper, loginAttemptsService);
     }
 
     @Bean
@@ -114,13 +118,14 @@ public class SecurityConfig implements AuthenticationConstants {
 
         httpSecurity
                 .authorizeRequests()
-                .antMatchers("/login/**", "/h2-console/**").permitAll()
+                .antMatchers(ADMIN_ONLY_PATTERNS).hasAuthority(RolesEnum.ADMIN.name())
+                .antMatchers("/login/**", "/user/register", "/h2-console/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/favicon.ico", "/user/refresh-token/**").permitAll()
                 .antMatchers("/user/**").hasAuthority(PermissionEnum.READ_USER.name())
                 .antMatchers("/technology/**").hasAuthority(PermissionEnum.READ_TECHNOLOGY.name())
-                .antMatchers(ADMIN_ONLY_PATTERNS).hasAuthority(RolesEnum.ADMIN.name())
                 .anyRequest().authenticated()
                 .expressionHandler(webSecurityExpressionHandler());
+//                .and().formLogin();
 
         httpSecurity.addFilter(customAuthenticationFilter);
         httpSecurity.addFilterBefore(new CustomAuthorizationFilter(objectMapper), UsernamePasswordAuthenticationFilter.class);

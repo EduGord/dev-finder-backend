@@ -14,6 +14,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "permission")
 public class Permission implements GrantedAuthority {
 
     @Id

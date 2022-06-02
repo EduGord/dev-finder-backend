@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.HashMap;
-import java.util.Map;
 
 @Getter
 @AllArgsConstructor
@@ -20,23 +19,27 @@ public enum MessagesEnum {
 
 	INVALID_JWT_TOKEN(406, "Authorization token is invalid."),
 	INVALID_CREDENTIALS(407, "Invalid credentials."),
+
 	USER_NOT_FOUND(408, "User not found."),
+
 
 	DEFAULT_ERROR(500, "Internal error. If problem persists, contact support."),
 	RESOURCE_NOT_FOUND(501, "Resource not found."),
-	EXTERNAL_RESOURCE_ACCESS_FAILED(502, "Failed to access external resource.");
+	EXTERNAL_RESOURCE_ACCESS_FAILED(502, "Failed to access external resource."),
+
+	LOGIN_ATTEMPTS_EXCEEDED_LIMIT(503, "Login attempts exceeded limits.");
 
 	private final int code;
 	private final String message;
 
-	public Map<String, Object> toMap() {
+	public HashMap<String, Object> toMap() {
 		var error = new HashMap<String, Object>();
 		error.put("Code", this.getCode());
 		error.put("Message", this.getMessage());
 		return error;
 	}
 
-	public Map<String, Object> toMap(Exception e) {
+	public HashMap<String, Object> toMap(Exception e) {
 		var error = this.toMap();
 		error.put("Exception", e.getMessage());
 		return error;

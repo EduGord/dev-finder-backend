@@ -6,6 +6,7 @@ import com.edug.devfinder.security.AuthenticationConstants;
 import com.edug.devfinder.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,10 +39,12 @@ public class SecurityService {
     }
 
     @Transactional
-    public Map<String, String> refreshToken(String refreshToken) throws JWTVerificationException {
+    public Map<String, String> refreshToken(String refreshToken) throws JWTVerificationException,
+            UsernameNotFoundException {
         var verifier = JWT.require(AuthenticationConstants.ALGORITHM).build();
         var decodedJwt = verifier.verify(refreshToken);
         var username = decodedJwt.getSubject();
+
         var userPrincipal = userDetailsService.loadUserByUsername(username);
 
         var authorities = userPrincipal.getAuthorities();

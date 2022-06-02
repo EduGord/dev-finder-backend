@@ -15,7 +15,7 @@ spring:
   profiles:
     active: prod
   cache:
-    type: simple
+    type: REDIS
   main:
     allow-bean-definition-overriding: true
     web-application-type: SERVLET
@@ -40,7 +40,12 @@ spring:
     throw-exception-if-no-handler-found: true
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
-
+  redis:
+    connect-timeout: 1000
+    lettuce:
+      shutdown-timeout: 100
+      pool:
+        enabled: true
 
 info:
   app:
@@ -151,12 +156,6 @@ logging:
       max-history: 32
     triggeringpolicy:
       max-file-size: 512MB
-    com:
-      edug:
-        devfinder:
-          configs:
-            HttpLoggingInterceptor: TRACE
-            HttpLoggingFilter: TRACE
 springdoc:
   show-actuator: true
   api-docs:

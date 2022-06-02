@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 public class JwtUtil implements AuthenticationConstants {
 
     public static String createToken(HttpServletRequest request,
-                              String username,
-                              Collection<? extends GrantedAuthority> authorities) {
+                                     String username,
+                                     Collection<? extends GrantedAuthority> authorities) {
         return JWT.create()
                 .withSubject(username)
                 .withExpiresAt(DateUtils.addHours(Calendar.getInstance().getTime(), TOKEN_DURATION))
@@ -27,12 +27,11 @@ public class JwtUtil implements AuthenticationConstants {
     }
 
     public static String createRefreshToken(HttpServletRequest request,
-                                     String username) {
+                                            String username) {
         return JWT.create()
                 .withSubject(username)
                 .withExpiresAt(DateUtils.addDays(Calendar.getInstance().getTime(), REFRESH_TOKEN_DURATION))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(ALGORITHM);
     }
-
 }

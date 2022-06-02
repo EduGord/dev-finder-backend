@@ -25,13 +25,17 @@ public class UserController {
         return new ResponseEntity<>(userService.register(userRegistrationRequest), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping(path="all")
+    @GetMapping(path="/self", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findSelf() {
+        return new ResponseEntity<>(userService.findSelf(), HttpStatus.OK);
+    }
+
+    @GetMapping(path="/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> findAll() {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping(path="refresh-token")
+    @GetMapping(path="/refresh-token")
     public ResponseEntity<?> refreshToken(@RequestParam(name="token") String refreshToken) {
         return new ResponseEntity<>(securityService.refreshToken(refreshToken), HttpStatus.OK);
     }

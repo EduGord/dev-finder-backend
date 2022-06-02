@@ -22,7 +22,7 @@ import java.util.Map;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter implements AuthenticationConstants {
 
 
-    private final AuthenticationManager authenticationManager;
+    private final CustomAuthenticationProvider customAuthenticationProvider;
     private final ObjectMapper objectMapper;
 
 
@@ -32,7 +32,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 request.getParameter("username"),
                 request.getParameter("password")
         );
-        return authenticationManager.authenticate(authenticationToken);
+        return customAuthenticationProvider.authenticate(authenticationToken);
     }
 
     @Override

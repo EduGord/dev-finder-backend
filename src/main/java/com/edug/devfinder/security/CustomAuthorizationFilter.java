@@ -41,30 +41,9 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter implements A
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException, JWTVerificationException, AuthorizationServiceException {
+            throws ServletException, IOException {
         var authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            var token = authorizationHeader.substring("Bearer ".length());
-            var verifier = JWT.require(ALGORITHM).build();
-            try {
-                var decodedJwt = verifier.verify(token);
-                var username = decodedJwt.getSubject();
-                var permissions = decodedJwt.getClaim("authorities").asArray(String.class);
-                Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                Stream.of(permissions).map(SimpleGrantedAuthority::new).forEach(authorities::add);
-                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(username, null, authorities));
-
-                filterChain.doFilter(request, response);
-            } catch (JWTVerificationException e) {
-                var errors = new HashMap<String, Object>();
-                var error = MessagesEnum.INVALID_JWT_TOKEN.toMap(e);
-                errors.put("Errors", List.of(error));
-                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                objectMapper.writeValue(response.getOutputStream(), errors);
-                LoggerUtil.logError(log, e);
-            }
-        } else {
+        if (authorizationHeader == null || !authorizationHeader.startsWith(TOKEN_TYPE)) {
             var exception = new AuthorizationServiceException(MessagesEnum.AUTHORIZATION_HEADERS_NOT_PRESENT.getMessage());
             var errors = new HashMap<String, Object>();
             var error = MessagesEnum.AUTH_TOKEN_REQUIRED.toMap(exception);
@@ -73,6 +52,25 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter implements A
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             objectMapper.writeValue(response.getOutputStream(), errors);
             LoggerUtil.logError(log, exception);
+        }
+        try {
+            var token = authorizationHeader.substring(TOKEN_TYPE.length()+1);
+            var verifier = JWT.require(ALGORITHM).build();
+            var decodedJwt = verifier.verify(token);
+            var username = decodedJwt.getSubject();
+            var permissions = decodedJwt.getClaim("authorities").asArray(String.class);
+            Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            Stream.of(permissions).map(SimpleGrantedAuthority::new).forEach(authorities::add);
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(username, null, authorities));
+            filterChain.doFilter(request, response);
+        } catch (JWTVerificationException e) {
+            var errors = new HashMap<String, Object>();
+            var error = MessagesEnum.INVALID_JWT_TOKEN.toMap(e);
+            errors.put("Errors", List.of(error));
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            objectMapper.writeValue(response.getOutputStream(), errors);
+            LoggerUtil.logError(log, e);
         }
     }
 }

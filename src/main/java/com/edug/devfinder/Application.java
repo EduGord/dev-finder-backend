@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.metrics.buffering.BufferingApplicationStartup;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ import java.util.TimeZone;
 @SpringBootApplication
 @Configuration
 @ConfigurationPropertiesScan
+@EnableCaching
 public class Application {
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(Application.class);
