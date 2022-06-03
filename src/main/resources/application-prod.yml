@@ -29,11 +29,12 @@ spring:
         hbm2ddl:
           auto: create
   redis:
-    client-name: devfinder
-    password: devfinder
     ssl: false
     cluster:
       nodes:
-        - localhost:7000
-        - localhost:7001
-        - localhost:7002
+        - 173.18.0.2:7000
+        - 173.18.0.3:7001
+        - 173.18.0.4:7002
+        - 173.18.0.5:7003
+        - 173.18.0.6:7004
+        - 173.18.0.7:7005

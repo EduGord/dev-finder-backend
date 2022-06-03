@@ -13,7 +13,6 @@ public interface AuthenticationConstants {
     String[] AUTHORIZATION_SHOULD_NOT_FILTER_PATTERNS = {
             "/login/**",
             "/user/register",
-            "/favicon.ico",
             "/user/refresh-token/**",
             "/h2-console/**"};
 

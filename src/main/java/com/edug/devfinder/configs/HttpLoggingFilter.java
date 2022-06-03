@@ -26,7 +26,7 @@ import java.util.UUID;
 public class HttpLoggingFilter extends OncePerRequestFilter {
     private final Logger log = LoggerFactory.getLogger(ClassUtils.getUserClass(this.getClass()));
 
-    private final String[] SHOULD_NOT_FILTER_PATTERNS = {"/actuator/**", "/swagger-ui/**", "/h2-console/**", "/favicon.ico"};
+    private final String[] SHOULD_NOT_FILTER_PATTERNS = {"/actuator/**", "/swagger-ui/**", "/h2-console/**"};
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override

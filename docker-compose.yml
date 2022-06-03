@@ -1,0 +1,118 @@
+version: "1"
+
+volumes:
+  redis_1_data: {}
+  redis_2_data: {}
+  redis_3_data: {}
+  redis_4_data: {}
+  redis_5_data: {}
+  redis_6_data: {}
+
+
+services:
+  dev-finder:
+    build:
+      context: .
+    image: "dev-finder"
+    ports:
+      - 8888:8888 # Map ports and provide services to the outside world
+    depends_on:
+      - redis-cluster
+    networks:
+      redis_cluster_net:
+        ipv4_address: 173.18.0.10
+
+  redis-node-1:
+    image: redis:7.0.0
+    container_name: redis-1
+    ports:
+      - 7000:7000
+    command: [ "redis-server","--appendonly yes","--cluster-enabled yes","--cluster-node-timeout 5000", "--cluster-config-file node-1.conf","--port 7000" ]
+    volumes:
+      - redis_1_data:/data
+    networks:
+      redis_cluster_net:
+        ipv4_address: 173.18.0.2
+  redis-node-2:
+    image: redis:7.0.0
+    container_name: redis-2
+    ports:
+      - 7001:7001
+    command: [ "redis-server","--appendonly yes","--cluster-enabled yes", "--cluster-node-timeout 5000", "--cluster-config-file node-2.conf", "--port 7001" ]
+    volumes:
+      - redis_2_data:/data
+    networks:
+      redis_cluster_net:
+        ipv4_address: 173.18.0.3
+  redis-node-3:
+    image: redis:7.0.0
+    container_name: redis-3
+    ports:
+      - 7002:7002
+    command: [ "redis-server","--appendonly yes","--cluster-enabled yes","--cluster-node-timeout 5000", "--cluster-config-file node-3.conf", "--port 7002" ]
+    volumes:
+      - redis_3_data:/data
+    networks:
+      redis_cluster_net:
+        ipv4_address: 173.18.0.4
+  redis-node-4:
+    image: redis:7.0.0
+    container_name: redis-4
+    ports:
+      - 7003:7003
+    command: [ "redis-server","--appendonly yes","--cluster-enabled yes","--cluster-node-timeout 5000", "--cluster-config-file node-4.conf", "--port 7003" ]
+    volumes:
+      - redis_4_data:/data
+    networks:
+      redis_cluster_net:
+        ipv4_address: 173.18.0.5
+  redis-node-5:
+    image: redis:7.0.0
+    container_name: redis-5
+    ports:
+      - 7004:7004
+    command: [ "redis-server","--appendonly yes","--cluster-enabled yes","--cluster-node-timeout 5000", "--cluster-config-file node-5.conf", "--port 7004" ]
+    volumes:
+      - redis_5_data:/data
+    networks:
+      redis_cluster_net:
+        ipv4_address: 173.18.0.6
+  redis-node-6:
+    image: redis:7.0.0
+    container_name: redis-6
+    ports:
+      - 7005:7005
+    command: [ "redis-server","--appendonly yes","--cluster-enabled yes","--cluster-node-timeout 5000", "--cluster-config-file node-6.conf", "--port 7005" ]
+    volumes:
+      - redis_6_data:/data
+    networks:
+      redis_cluster_net:
+        ipv4_address: 173.18.0.7
+
+  redis-cluster:
+    image: 'redis:7.0'
+    build:
+      context: redis
+    container_name: redis-cluster
+    tty: true
+    command: redis-cli --cluster create 173.18.0.2:7000 173.18.0.3:7001 173.18.0.4:7002 173.18.0.5:7003 173.18.0.6:7004 173.18.0.7:7005 --cluster-yes --cluster-replicas 1
+    depends_on:
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+      - redis-node-4
+      - redis-node-5
+      - redis-node-6
+    networks:
+      redis_cluster_net:
+        ipv4_address: 173.18.0.8
+
+# Rename the default network so we can easily identify it
+# Across all containers
+networks:
+  redis_cluster_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 173.18.0.0/16
