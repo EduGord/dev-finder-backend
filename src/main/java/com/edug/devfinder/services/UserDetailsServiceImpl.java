@@ -33,7 +33,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         var entityManager = entityManagerFactory.createEntityManager();
-        entityManager.getTransaction().begin();
         var user = entityManager.createQuery(
                         "SELECT u FROM User u WHERE UPPER(u.username) = UPPER(:username)", User.class)
                 .setParameter("username", username)

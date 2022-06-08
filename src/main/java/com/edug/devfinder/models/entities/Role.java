@@ -12,7 +12,7 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,18 +34,15 @@ public class Role implements Serializable {
 
     @ManyToMany(mappedBy="roles", fetch = FetchType.LAZY)
     @JsonBackReference
-    private Collection<User> users = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "role_permission",
-            joinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "permission_id", referencedColumnName = "id"))
+    @JoinTable(name = "role_permission",
+            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
     @JsonBackReference
-    private Collection<Permission> permissions;
+    private List<Permission> permissions;
 
     @JsonIgnore
     public String getName() {

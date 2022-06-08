@@ -38,6 +38,7 @@ public class ObjectMapperConfig {
                         // Json
                         new JodaModule())
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                .setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
                 .findAndRegisterModules();
     }
 

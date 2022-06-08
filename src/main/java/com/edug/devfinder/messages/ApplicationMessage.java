@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -49,11 +50,25 @@ public class ApplicationMessage implements Serializable {
                 .build();
     }
 
-    public static ApplicationMessage parse(Exception exception) {
+    public static ApplicationMessage getDefault() {
         return ApplicationMessage.builder()
                 .code(MessagesEnum.DEFAULT_ERROR.getCode())
                 .message(MessagesEnum.DEFAULT_ERROR.getMessage())
-                .exception(exception)
+                .build();
+    }
+
+    public static ApplicationMessage parse(Exception e) {
+        return ApplicationMessage.builder()
+                .code(MessagesEnum.DEFAULT_ERROR.getCode())
+                .message(MessagesEnum.DEFAULT_ERROR.getMessage())
+                .exception(e)
+                .build();
+    }
+    public static ApplicationMessage parse(EntityNotFoundException e) {
+        return ApplicationMessage.builder()
+                .code(MessagesEnum.ENTITY_NOT_FOUND.getCode())
+                .message(MessagesEnum.ENTITY_NOT_FOUND.getMessage())
+                .exception(e)
                 .build();
     }
 
@@ -71,6 +86,13 @@ public class ApplicationMessage implements Serializable {
                 .code(messageEnum.getCode())
                 .message(messageEnum.getMessage())
                 .exception(exception)
+                .build();
+    }
+
+    public static ApplicationMessage parse(MessagesEnum messageEnum) {
+        return ApplicationMessage.builder()
+                .code(messageEnum.getCode())
+                .message(messageEnum.getMessage())
                 .build();
     }
 

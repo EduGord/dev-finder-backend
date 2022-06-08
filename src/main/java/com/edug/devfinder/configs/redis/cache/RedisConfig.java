@@ -92,20 +92,20 @@ public class RedisConfig implements RedisConfigConstants, CacheTopicsConstants, 
     }
 
     @Bean
-    @Profile("!local")
+//    @Profile("!local")
     RedisClusterConfiguration redisClusterConfiguration() {
         log.info("Initializing Redis Cluster Configuration instance.");
         return new RedisClusterConfiguration(clusterConfigProperties.getNodes());
     }
 
-    @Bean
-    @Profile("local")
-    RedisStandaloneConfiguration redisStandaloneConfiguration() {
-        var config = new RedisStandaloneConfiguration(properties.getHost(), properties.getPort());
-        config.setPassword(RedisPassword.of(properties.getPassword()));
-        config.setUsername(properties.getUsername());
-        return config;
-    }
+//    @Bean
+//    @Profile("local")
+//    RedisStandaloneConfiguration redisStandaloneConfiguration() {
+//        var config = new RedisStandaloneConfiguration(properties.getHost(), properties.getPort());
+//        config.setPassword(RedisPassword.of(properties.getPassword()));
+//        config.setUsername(properties.getUsername());
+//        return config;
+//    }
 
     // Writes to master, reads from a replica if available
     @Bean
@@ -122,15 +122,15 @@ public class RedisConfig implements RedisConfigConstants, CacheTopicsConstants, 
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
         LettuceConnectionFactory conn;
-        if (activeProfile.equals("local")) {
-            log.info("Initializing Redis Connection Factory using Standalone Configuration");
-            conn = new LettuceConnectionFactory(redisStandaloneConfiguration(),
-                    this.lettuceClientConfiguration());
-        } else {
+//        if (activeProfile.equals("local")) {
+//            log.info("Initializing Redis Connection Factory using Standalone Configuration");
+//            conn = new LettuceConnectionFactory(redisStandaloneConfiguration(),
+//                    this.lettuceClientConfiguration());
+//        } else {
             log.info("Initializing Redis Connection Factory using Cluster Configuration");
             conn = new LettuceConnectionFactory(redisClusterConfiguration(),
                     this.lettuceClientConfiguration());
-        }
+//        }
         conn.setValidateConnection(true);
         return conn;
     }
@@ -167,10 +167,10 @@ public class RedisConfig implements RedisConfigConstants, CacheTopicsConstants, 
                 .fromConnectionFactory(this.redisConnectionFactory())
                 .cacheDefaults(this.redisCacheConfiguration())
                 .withCacheConfiguration(USER_LOGIN_ATTEMPTS,
-                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(MAX_ATTEMS_PER_USERNAME_TTL))
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(MAX_ATTEMPTS_PER_USERNAME_TTL))
                 .withCacheConfiguration(IP_LOGIN_ATTEMPTS,
-                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(MAX_ATTEMS_PER_IP_TTL))
-                .transactionAware();
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(MAX_ATTEMPTS_PER_IP_TTL));
+//                .transactionAware();
         return redisCacheManager.build();
     }
 }

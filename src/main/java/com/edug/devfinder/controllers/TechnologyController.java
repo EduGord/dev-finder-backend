@@ -1,12 +1,11 @@
 package com.edug.devfinder.controllers;
 
-import com.edug.devfinder.models.entities.Technology;
 import com.edug.devfinder.services.TechnologyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/technology")
@@ -15,12 +14,16 @@ public class TechnologyController {
     private final TechnologyService technologyService;
 
     @PostMapping(path = "/add")
-    public Technology add(@RequestParam("name") String technologyName) {
-        return technologyService.add(technologyName);
+    public ResponseEntity<?> register(@RequestParam("name") String technologyName) {
+        var technology = technologyService.create(technologyName);
+        return new ResponseEntity<>(technology, HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/all")
-    public List<Technology> listAll() {
-        return technologyService.listAll();
+    public ResponseEntity<?> listAll() {
+        var technologies = technologyService.listAll();
+        if (technologies.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(technologies);
     }
 }

@@ -1,6 +1,6 @@
 <configuration>
 
-    <appender name="mask" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="maskSensitiveData" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
             <layout class="com.edug.devfinder.configs.MaskingPatternLayout">
                 <maskPattern>\"SSN\"\s*:\s*\"(.*?)\"</maskPattern> <!-- SSN JSON pattern -->
@@ -13,11 +13,34 @@
         </encoder>
     </appender>
 
+    <appender name="rollingFile"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/dev-finder.log</file>
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+        </encoder>
+
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily and when the file reaches 10 MegaBytes -->
+            <fileNamePattern>dev-finder.%d{yyyy-MM-dd,America/Recife}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>512MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <totalSizeCap>40GB</totalSizeCap>
+            <maxHistory>32</maxHistory>
+        </rollingPolicy>
+    </appender>
+
     <logger name="com.edug.devfinder.configs.HttpLoggingInterceptor" level="trace"/>
     <logger name="com.edug.devfinder.configs.HttpLoggingFilter" level="trace"/>
 
     <root level="info">
-        <appender-ref ref="mask"/>
+        <appender-ref ref="maskSensitiveData"/>
+        <appender-ref ref="rollingFile"/>
     </root>
 
 </configuration>

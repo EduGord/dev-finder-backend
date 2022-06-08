@@ -6,7 +6,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,7 +26,7 @@ public class Permission implements GrantedAuthority {
     private PermissionEnum permission;
 
     @ManyToMany(mappedBy="permissions", fetch = FetchType.LAZY)
-    private Collection<Role> roles;
+    private List<Role> roles;
 
     @Override
     @JsonIgnore

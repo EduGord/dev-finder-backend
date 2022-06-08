@@ -13,7 +13,7 @@ public interface AuthenticationConstants {
     String[] AUTHORIZATION_SHOULD_NOT_FILTER_PATTERNS = {
             "/login/**",
             "/user/register",
-            "/user/refresh-token/**",
+            "/security/refresh-token/**",
             "/h2-console/**"};
 
     String[] ADMIN_ONLY_PATTERNS = {
@@ -27,7 +27,8 @@ public interface AuthenticationConstants {
     int TOKEN_DURATION = 3; // hours
 
     int MAX_ATTEMPS_PER_USERNAME = 3;
-    Duration MAX_ATTEMS_PER_USERNAME_TTL = Duration.ofMinutes(15);
+
     int MAX_ATTEMPTS_PER_IP = 12;
-    Duration MAX_ATTEMS_PER_IP_TTL = Duration.ofHours(1);
+
+
 }

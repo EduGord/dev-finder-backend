@@ -1,40 +1,29 @@
-server:
-  port: 8888
-
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        trace: false
-        web-allow-others: false
   datasource:
-    url: jdbc:h2:file:./data/h2;MODE=LEGACY
-    username: sa
-    password: 123
-    driverClassName: org.h2.Driver
-  sql:
-    init:
-      mode: always
-      platform: h2
+    url: jdbc:postgresql://PLACEHOLDER1:5432/dev-finder
+    username: PLACEHOLDER
+    password: PLACEHOLDER
+    driverClassName: org.postgresql.Driver
+    hikari:
+      auto-commit: false
+      connection-timeout: 250
+      maximum-pool-size: 50
   jpa:
-    show-sql: true
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        hbm2ddl:
-          auto: create
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
   redis:
-    ssl: false
+    ssl: true
+    host: PLACEHOLDER
+    password: PLACEHOLDER
     cluster:
       nodes:
-        - 173.18.0.2:7000
-        - 173.18.0.3:7001
-        - 173.18.0.4:7002
-        - 173.18.0.5:7003
-        - 173.18.0.6:7004
-        - 173.18.0.7:7005
+        - PLACEHOLDER:7000
+        - PLACEHOLDER:7001
+        - PLACEHOLDER:7002
+        - PLACEHOLDER:7003
+        - PLACEHOLDER:7004
+        - PLACEHOLDER:7005

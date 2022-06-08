@@ -19,6 +19,6 @@ public class PermissionController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping(path="all")
     public ResponseEntity<?> findAll() {
-        return new ResponseEntity<>(permissionService.findAll(), HttpStatus.OK);
+        return ResponseEntity.ok(permissionService.findAll());
     }
 }

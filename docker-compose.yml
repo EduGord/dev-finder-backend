@@ -1,6 +1,7 @@
 version: "1"
 
 volumes:
+  dev_finder_data: {}
   redis_1_data: {}
   redis_2_data: {}
   redis_3_data: {}
@@ -17,10 +18,31 @@ services:
     ports:
       - 8888:8888 # Map ports and provide services to the outside world
     depends_on:
+      - dev-finder-postgresql
       - redis-cluster
     networks:
-      redis_cluster_net:
+      dev_finder_net:
         ipv4_address: 173.18.0.10
+    volumes:
+      - dev_finder_data:/logs
+      - dev_finder_data:/data
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://173.18.0.11:5432/dev-finder
+      - SPRING_DATASOURCE_USERNAME=dev-finder
+      - SPRING_DATASOURCE_PASSWORD=☺♠↔•◘○◙♀♂♪►◄↕‼¶§→☻∟▲
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  dev-finder-postgresql:
+    image: 'postgres:14.3-alpine'
+    container_name: dev-finder-postgresql
+    environment:
+      - POSTGRES_USER=dev-finder
+      - POSTGRES_PASSWORD=☺♠↔•◘○◙♀♂♪►◄↕‼¶§→☻∟▲
+    ports:
+      - 5432:5432
+    networks:
+      dev_finder_net:
+        ipv4_address: 173.18.0.11
 
   redis-node-1:
     image: redis:7.0.0
@@ -31,7 +53,7 @@ services:
     volumes:
       - redis_1_data:/data
     networks:
-      redis_cluster_net:
+      dev_finder_net:
         ipv4_address: 173.18.0.2
   redis-node-2:
     image: redis:7.0.0
@@ -42,7 +64,7 @@ services:
     volumes:
       - redis_2_data:/data
     networks:
-      redis_cluster_net:
+      dev_finder_net:
         ipv4_address: 173.18.0.3
   redis-node-3:
     image: redis:7.0.0
@@ -53,7 +75,7 @@ services:
     volumes:
       - redis_3_data:/data
     networks:
-      redis_cluster_net:
+      dev_finder_net:
         ipv4_address: 173.18.0.4
   redis-node-4:
     image: redis:7.0.0
@@ -64,7 +86,7 @@ services:
     volumes:
       - redis_4_data:/data
     networks:
-      redis_cluster_net:
+      dev_finder_net:
         ipv4_address: 173.18.0.5
   redis-node-5:
     image: redis:7.0.0
@@ -75,7 +97,7 @@ services:
     volumes:
       - redis_5_data:/data
     networks:
-      redis_cluster_net:
+      dev_finder_net:
         ipv4_address: 173.18.0.6
   redis-node-6:
     image: redis:7.0.0
@@ -86,7 +108,7 @@ services:
     volumes:
       - redis_6_data:/data
     networks:
-      redis_cluster_net:
+      dev_finder_net:
         ipv4_address: 173.18.0.7
 
   redis-cluster:
@@ -104,13 +126,13 @@ services:
       - redis-node-5
       - redis-node-6
     networks:
-      redis_cluster_net:
+      dev_finder_net:
         ipv4_address: 173.18.0.8
 
 # Rename the default network so we can easily identify it
 # Across all containers
 networks:
-  redis_cluster_net:
+  dev_finder_net:
     driver: bridge
     ipam:
       driver: default

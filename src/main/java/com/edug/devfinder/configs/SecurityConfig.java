@@ -120,7 +120,7 @@ public class SecurityConfig implements AuthenticationConstants {
                 .authorizeRequests()
                 .antMatchers(ADMIN_ONLY_PATTERNS).hasAuthority(RolesEnum.ADMIN.name())
                 .antMatchers("/login/**", "/user/register", "/h2-console/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/user/refresh-token/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/security/refresh-token/**").permitAll()
                 .antMatchers("/user/**").hasAuthority(PermissionEnum.READ_USER.name())
                 .antMatchers("/technology/**").hasAuthority(PermissionEnum.READ_TECHNOLOGY.name())
                 .anyRequest().authenticated()

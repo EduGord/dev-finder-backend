@@ -1,7 +1,7 @@
 package com.edug.devfinder.services;
 
-import com.edug.devfinder.models.entities.User;
-import com.edug.devfinder.models.entities.UserTechnology;
+import com.edug.devfinder.models.enums.ProficiencyEnum;
+import com.edug.devfinder.models.responses.UserTechnologyDTO;
 import com.edug.devfinder.repositories.TechnologyRepository;
 import com.edug.devfinder.repositories.UserTechnologyRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,9 +25,28 @@ public class RecruiterService {
     private final TechnologyRepository technologyRepository;
     private final UserTechnologyRepository userTechnologyRepository;
 
-    public Optional<Set<UserTechnology>> findAllUsersByTechnology(String name) throws EntityNotFoundException {
+    public List<UserTechnologyDTO> searchByTechnologyAndProficiency(String name, Optional<String> proficiency)
+            throws EntityNotFoundException {
+
         var technology = technologyRepository.findByNameIgnoreCase(name)
                 .orElseThrow(() -> new EntityNotFoundException("Technology not found."));
-        return userTechnologyRepository.findAllByTechnology(technology);
+        var userTechnologies = userTechnologyRepository.findAllByTechnology(technology);
+
+        if (userTechnologies.isPresent()) {
+            if (proficiency.isPresent()) {
+                var proficiencyEnum = ProficiencyEnum.valueOf(proficiency.get().toUpperCase());
+                var filtered = userTechnologies.get().stream()
+                        .filter((ut) -> ut.getProficiencyEnum().greaterThenOrEquals(proficiencyEnum))
+                        .collect(Collectors.toSet());
+                return filtered.stream()
+                        .map(UserTechnologyDTO::new)
+                        .collect(Collectors.toList());
+            }
+            return userTechnologies.stream()
+                    .flatMap(Collection::stream)
+                    .map(UserTechnologyDTO::new)
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
     }
 }

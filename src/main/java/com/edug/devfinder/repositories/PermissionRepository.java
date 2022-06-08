@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Table(name="permission")
-public interface PermissionRepository extends JpaRepository<Permission, Long> {}
+public interface PermissionRepository extends JpaRepository<Permission, Long> {
+}

@@ -44,7 +44,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter implements A
             throws ServletException, IOException {
         var authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authorizationHeader == null || !authorizationHeader.startsWith(TOKEN_TYPE)) {
-            var exception = new AuthorizationServiceException(MessagesEnum.AUTHORIZATION_HEADERS_NOT_PRESENT.getMessage());
+            var exception = new AuthorizationServiceException(MessagesEnum.AUTHORIZATION_HEADERS_REQUIRED.getMessage());
             var errors = new HashMap<String, Object>();
             var error = MessagesEnum.AUTH_TOKEN_REQUIRED.toMap(exception);
             errors.put("Errors", List.of(error));

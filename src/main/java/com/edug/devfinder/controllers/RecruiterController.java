@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping(path = "/recruiter")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -21,11 +23,12 @@ public class RecruiterController {
 
     @GetMapping(path = "/search-by-technology", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('RECRUITER')")
-    public ResponseEntity<?> register(@RequestParam("name") String name) {
-        var usersTechnology = recruiterService.findAllUsersByTechnology(name);
-        if (usersTechnology.isPresent())
+    public ResponseEntity<?> searchByTechnology(@RequestParam("name") String name,
+                                                @RequestParam("proficiency") Optional<String> proficiency) {
+        var usersTechnology = recruiterService.searchByTechnologyAndProficiency(name, proficiency);
+        if (usersTechnology.isEmpty())
             return ResponseEntity.ok(usersTechnology);
-        else
-            return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
 }
+

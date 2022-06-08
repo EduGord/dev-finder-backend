@@ -2,6 +2,7 @@ package com.edug.devfinder.security;
 
 import com.edug.devfinder.messages.LogMessages;
 import com.edug.devfinder.messages.MessagesEnum;
+import com.edug.devfinder.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
@@ -24,7 +24,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider, Aut
     private final Logger log = LoggerFactory.getLogger(ClassUtils.getUserClass(this.getClass()));
     private final PasswordEncoder passwordEncoder;
 
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

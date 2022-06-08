@@ -21,7 +21,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
@@ -35,6 +34,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.Collections;
@@ -76,9 +76,9 @@ public class GlobalExceptionHandler {
 
     /* body parameter validation */
     @ResponseBody
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(value={BindException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, List<ApplicationMessage>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public Map<String, List<ApplicationMessage>> handleMethodArgumentNotValidException(BindException e) {
         LoggerUtil.logError(log, e);
         List<ApplicationMessage> messages = new LinkedList<>();
         e.getBindingResult().getFieldErrors().forEach((fieldError) -> {
@@ -128,6 +128,14 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public Map<String, List<ApplicationMessage>> handleApplicationException(ApplicationException e) {
         LoggerUtil.logError(log, e);
+        return errors(ApplicationMessage.parse(e.getMessageEnum()));
+    }
+
+    @ResponseBody
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public Map<String, List<ApplicationMessage>> handleApplicationException(EntityNotFoundException e) {
+        LoggerUtil.logError(log, e);
         return errors(ApplicationMessage.parse(e));
     }
 
@@ -145,13 +153,13 @@ public class GlobalExceptionHandler {
             MissingPathVariableException.class, MissingServletRequestParameterException.class,
             ServletRequestBindingException.class, ConversionNotSupportedException.class,
             TypeMismatchException.class, HttpMessageNotWritableException.class,
-            MissingServletRequestPartException.class, BindException.class, AsyncRequestTimeoutException.class,
-            Exception.class}
+            MissingServletRequestPartException.class, AsyncRequestTimeoutException.class }
+//            Exception.class}
     )
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, List<ApplicationMessage>> handleException(Exception e) {
         LoggerUtil.logError(log, e);
-        return errors(ApplicationMessage.parse(e));
+        return errors(ApplicationMessage.getDefault());
     }
 
     private Map<String, List<ApplicationMessage>> errors(List<ApplicationMessage> messages) {

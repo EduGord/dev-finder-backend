@@ -15,7 +15,7 @@ public class LoginAttemptsIpRepository implements AuthenticationConstants, Cache
     public void increment(String ip) {
         var key = String.join(":", IP_LOGIN_ATTEMPTS, ip);
         redisTemplate.opsForValue().increment(key);
-        redisTemplate.expire(key, MAX_ATTEMS_PER_IP_TTL);
+        redisTemplate.expire(key, MAX_ATTEMPTS_PER_IP_TTL);
     }
 
     public Integer getCounter(String ip) {

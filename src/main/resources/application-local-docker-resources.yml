@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dev-finder
+    username: dev-finder
+    password: ☺♠↔•◘○◙♀♂♪►◄↕‼¶§→☻∟▲
+    driverClassName: org.postgresql.Driver
+    hikari:
+      auto-commit: false
+      connection-timeout: 250
+      maximum-pool-size: 50
+#  sql:
+#    init:
+#      mode: always
+#      platform: postgresql
+  jpa:
+    show-sql: true
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+  redis:
+    ssl: false
+    cluster:
+      nodes:
+        - localhost:7000
+        - localhost:7001
+        - localhost:7002
+        - localhost:7003
+        - localhost:7004
+        - localhost:7005
