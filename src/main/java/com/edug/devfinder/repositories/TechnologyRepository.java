@@ -13,4 +13,5 @@ import java.util.Optional;
 public interface TechnologyRepository extends JpaRepository<Technology, Long> {
     Optional<Technology> findByNameIgnoreCase(String name);
     List<Technology> findAllByNameIn(List<String> technologies);
+    List<Technology> findAllByNameStartsWithIgnoreCase(String technologyPrefix);
 }

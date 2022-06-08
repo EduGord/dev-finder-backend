@@ -8,10 +8,10 @@ spring:
       auto-commit: false
       connection-timeout: 250
       maximum-pool-size: 50
-  #  sql:
-#    init:
-#      mode: always
-#      platform: postgresql
+  sql:
+    init:
+      mode: always
+      platform: postgresql
   jpa:
     defer-datasource-initialization: true
     hibernate:

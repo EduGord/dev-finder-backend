@@ -22,10 +22,17 @@ public class TechnologyService {
         return new TechnologyDTO(newTechnology);
     }
 
-    public List<TechnologyDTO> listAll() {
+    private List<TechnologyDTO> listAll() {
         var technologies = technologyRepository.findAll();
         return technologies.stream()
                 .map(TechnologyDTO::new)
                 .collect(Collectors.toList());
     }
+    public List<TechnologyDTO> search(String technologyPrefix) {
+        if (technologyPrefix == null)
+            return listAll();
+        var technologies = technologyRepository.findAllByNameStartsWithIgnoreCase(technologyPrefix);
+        return technologies.stream().map(TechnologyDTO::new).collect(Collectors.toList());
+    }
+
 }

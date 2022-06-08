@@ -3,10 +3,7 @@ package com.edug.devfinder.models.responses;
 import com.edug.devfinder.models.entities.Role;
 import com.edug.devfinder.models.entities.User;
 import com.edug.devfinder.models.entities.UserTechnology;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;

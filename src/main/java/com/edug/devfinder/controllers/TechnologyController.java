@@ -19,9 +19,9 @@ public class TechnologyController {
         return new ResponseEntity<>(technology, HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/all")
-    public ResponseEntity<?> listAll() {
-        var technologies = technologyService.listAll();
+    @GetMapping(path="/search")
+    public ResponseEntity<?> search(@RequestParam(value = "startsWith", required = false) String startsWith) {
+        var technologies = technologyService.search(startsWith);
         if (technologies.isEmpty())
             return ResponseEntity.noContent().build();
         return ResponseEntity.ok(technologies);

@@ -14,7 +14,7 @@ server:
 
 spring:
   profiles:
-    active: orid
+    active: docker
   cache:
     type: REDIS
   main:
